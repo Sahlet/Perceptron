@@ -1,0 +1,13 @@
+D:\Книги\Прога\Даша\Perceptron\Perceptron\bin\Debug\Perceptron.exe.config
+D:\Книги\Прога\Даша\7 семестр\Працептрон\Perceptron\Perceptron\bin\Debug\Perceptron.exe.config
+D:\Книги\Прога\Даша\7 семестр\Працептрон\Perceptron\Perceptron\bin\Debug\Perceptron.exe
+D:\Книги\Прога\Даша\7 семестр\Працептрон\Perceptron\Perceptron\bin\Debug\Perceptron.pdb
+D:\Книги\Прога\Даша\7 семестр\Працептрон\Perceptron\Perceptron\obj\Debug\Perceptron.csprojResolveAssemblyReference.cache
+D:\Книги\Прога\Даша\7 семестр\Працептрон\Perceptron\Perceptron\obj\Debug\Perceptron.Form1.resources
+D:\Книги\Прога\Даша\7 семестр\Працептрон\Perceptron\Perceptron\obj\Debug\Perceptron.Properties.Resources.resources
+D:\Книги\Прога\Даша\7 семестр\Працептрон\Perceptron\Perceptron\obj\Debug\Perceptron.csproj.GenerateResource.Cache
+D:\Книги\Прога\Даша\7 семестр\Працептрон\Perceptron\Perceptron\obj\Debug\Perceptron.exe
+D:\Книги\Прога\Даша\7 семестр\Працептрон\Perceptron\Perceptron\obj\Debug\Perceptron.pdb
+D:\Книги\Прога\Даша\7 семестр\Працептрон\Perceptron\Perceptron\bin\Debug\Newtonsoft.Json.dll
+D:\Книги\Прога\Даша\7 семестр\Працептрон\Perceptron\Perceptron\bin\Debug\Newtonsoft.Json.xml
+D:\Книги\Прога\Даша\7 семестр\Працептрон\Perceptron\Perceptron\obj\Debug\Perceptron.StudySetViewer.resources
