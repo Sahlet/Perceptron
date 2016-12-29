@@ -15,15 +15,20 @@ namespace Perceptron
             public Dictionary<char, List<Bitmap>> study_set;
             public char ch;
             public Bitmap bmp;
-            public func(Dictionary<char, List<Bitmap>> study_set, char ch, Bitmap bmp) {
+            public Control control;
+            public func(Dictionary<char, List<Bitmap>> study_set, char ch, Bitmap bmp, Control control) {
                 this.study_set = study_set;
                 this.ch = ch;
                 this.bmp = bmp;
+                this.control = control;
             }
 
             public void dell(object sender, EventArgs e) {
                 study_set[ch].Remove(bmp);
                 if (study_set[ch].Count == 0) study_set.Remove(ch);
+                if (control.Parent != null) {
+                    control.Parent.Controls.Remove(control);
+                }
             }
         }
 
@@ -36,28 +41,30 @@ namespace Perceptron
         }
 
         private void StudySetViewer_Load(object sender, EventArgs e) {
-            int height = 0;
             foreach (var pare in study_set) {
                 foreach (Bitmap bmp in pare.Value) {
                     Panel row = new Panel();
                     row.Margin = new Padding(5, 0, 5, 0);
-                    row.Location = new Point(0, height);
-                    row.MinimumSize = new Size(50, 50);
+                    row.Dock = DockStyle.Bottom;
                     {
                         Panel left = new Panel();
                         left.Dock = DockStyle.Left;
-                        left.Size = new Size(20, 0);
-                        left.Margin = new Padding(0, 0, 5, 0); {
+                        left.Size = new Size(70, 0);
+                        left.Margin = new Padding(0, 0, 5, 0);
+                        {
                             Label leter = new Label();
-                            leter.Text = pare.Key.ToString();
+                            leter.Text = "Leter:   " + pare.Key.ToString();
                             leter.Dock = DockStyle.Top;
                             leter.Margin = new Padding(0, 0, 0, 5);
                             Button remove = new Button();
                             remove.Text = "remove";
                             remove.Dock = DockStyle.Top;
-                            func deleter = new func(study_set, pare.Key, bmp);
+                            func deleter = new func(study_set, pare.Key, bmp, row);
                             funks_holder.Add(deleter);
                             remove.Click += new EventHandler(deleter.dell);
+
+                        left.Controls.Add(remove);
+                        left.Controls.Add(leter);
                         }
 
                         PictureBox image = new PictureBox();
@@ -66,11 +73,13 @@ namespace Perceptron
                         image.Dock = DockStyle.Fill;
 
                         row.Size = new Size(left.Size.Width + (left.Margin.Left + left.Margin.Right) + image.Image.Width, image.Image.Height);
-                        row.Controls.Add(left);
+                        row.MinimumSize = row.Size;
+                        row.MaximumSize = row.Size;
                         row.Controls.Add(image);
+                        row.Controls.Add(left);
+                        row.BorderStyle = BorderStyle.FixedSingle;
                     }
-                    height += row.Size.Height + 10;
-                    Controls.Add(row);
+                    panel1.Controls.Add(row);
                 }
             }
         }

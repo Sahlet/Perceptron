@@ -211,6 +211,7 @@
             // 
             // viewStudySetToolStripMenuItem
             // 
+            this.viewStudySetToolStripMenuItem.Enabled = false;
             this.viewStudySetToolStripMenuItem.Name = "viewStudySetToolStripMenuItem";
             this.viewStudySetToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.viewStudySetToolStripMenuItem.Text = "View";
@@ -218,6 +219,7 @@
             // 
             // clearToolStripMenuItem
             // 
+            this.clearToolStripMenuItem.Enabled = false;
             this.clearToolStripMenuItem.Name = "clearToolStripMenuItem";
             this.clearToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.clearToolStripMenuItem.Text = "Clean";

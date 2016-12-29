@@ -34,17 +34,19 @@
             // panel1
             // 
             this.panel1.AutoScroll = true;
+            this.panel1.BackColor = System.Drawing.SystemColors.Control;
+            this.panel1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel1.Location = new System.Drawing.Point(0, 0);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(481, 281);
+            this.panel1.Size = new System.Drawing.Size(856, 446);
             this.panel1.TabIndex = 0;
             // 
             // StudySetViewer
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(481, 281);
+            this.ClientSize = new System.Drawing.Size(856, 446);
             this.Controls.Add(this.panel1);
             this.Name = "StudySetViewer";
             this.Text = "Study Set";

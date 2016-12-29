@@ -236,14 +236,19 @@ namespace Perceptron
 
         private void add_to_study_set_button_Click(object sender, EventArgs e) {
             if (empty_picture) return;
-            if (study_set[textBox1.Text[0]] == null) study_set[textBox1.Text[0]] = new List<Bitmap>();
+            if (!study_set.ContainsKey(textBox1.Text[0])) study_set.Add(textBox1.Text[0], new List<Bitmap>());
             study_set[textBox1.Text[0]].Add(new Bitmap((Bitmap)pictureBox1.Image));
             viewStudySetToolStripMenuItem.Enabled = true;
             clearToolStripMenuItem.Enabled = true;
         }
 
         private void viewStudySetToolStripMenuItem_Click(object sender, EventArgs e) {
-
+            StudySetViewer form = new StudySetViewer(study_set);
+            form.ShowDialog();
+            if (study_set.Count == 0) {
+                viewStudySetToolStripMenuItem.Enabled = false;
+                clearToolStripMenuItem.Enabled = false;
+            }
         }
 
         private void clearToolStripMenuItem_Click(object sender, EventArgs e) {
