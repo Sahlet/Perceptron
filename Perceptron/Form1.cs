@@ -8,12 +8,26 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Newtonsoft.Json;
 
 namespace Perceptron
 {
     public partial class Form1 : Form
     {
-        private Perceptron perceptron;
+        Perceptron _perceptron_;
+        private Perceptron perceptron {
+            get { return _perceptron_; }
+            set {
+                _perceptron_ = value;
+                SavePerceptronToolStripMenuItem.Enabled = _perceptron_ != null;
+                createToolStripMenuItem.Enabled = study_set.Count > 0 && _perceptron_ == null;
+                cleanToolStripMenuItem.Enabled = _perceptron_ != null;
+            }
+        }
+        private Dictionary<char, List<Bitmap>> study_set = new Dictionary<char, List<Bitmap>>();
+        private Dictionary<char, List<Bitmap>>.KeyCollection perceptron_studied_leters;
+        private Size sensor_field_size;
+        private PerceptronParametersSeter parametersSeter;
         private Point startP;
         bool _empty_picture_ = true;
         private bool empty_picture {
@@ -23,6 +37,7 @@ namespace Perceptron
                 clean_picture_button.Enabled = !_empty_picture_;
                 refresh_add_to_study_set_button_enable();
                 identify_picture_button_enable();
+                SavePictureMenuItem.Enabled = !_empty_picture_;
             }
         }
         void refresh_add_to_study_set_button_enable() {
@@ -32,8 +47,7 @@ namespace Perceptron
             identify_picture_button.Enabled = (perceptron != null && !empty_picture);
         }
 
-        private bool[,] sensor_field;
-        Dictionary<char, List<Bitmap>> study_set;
+        StudySetViewer studySetViewer;
 
         public Form1() {
             InitializeComponent();
@@ -49,6 +63,7 @@ namespace Perceptron
             openFileDialog1.RestoreDirectory = true;
             openFileDialog1.Multiselect = false;
 
+            saveFileDialog1.InitialDirectory = Environment.CurrentDirectory;
             saveFileDialog1.Filter =
                 "jpg files (*.jpg)|*.jpg|" +
                 "png files (*.png)|*.png|" +
@@ -62,13 +77,15 @@ namespace Perceptron
             openFileDialog2.RestoreDirectory = true;
             openFileDialog2.Multiselect = false;
 
+            saveFileDialog2.InitialDirectory = Environment.CurrentDirectory;
             saveFileDialog2.Filter = "perceptron files (*.pcptrn)|*.pcptrn";
             saveFileDialog2.FilterIndex = 1;
             saveFileDialog2.RestoreDirectory = true;
 
             fontDialog1.Font = new Font("Arial", 40f);
 
-            study_set = new Dictionary<char, List<Bitmap>>();
+            studySetViewer = new StudySetViewer(study_set);
+            parametersSeter = new PerceptronParametersSeter(studySetViewer);
         }
 
         private void pictureBox1_MouseMove(object sender, MouseEventArgs e) {
@@ -122,7 +139,27 @@ namespace Perceptron
                 pictureBox1.Image.Save(openFileDialog1.FileName);
             }
         }
+        private class PerceptronData {
+            public string perceptron_str;
+            public Dictionary<char, List<Bitmap>>.KeyCollection perceptron_studied_leters;
+        }
 
+        private void LoadPerceptronMenuItem_Click(object sender, EventArgs e) {
+            if (openFileDialog2.ShowDialog() == System.Windows.Forms.DialogResult.OK) {
+                PerceptronData data = JsonConvert.DeserializeObject<PerceptronData>(System.IO.File.ReadAllText(openFileDialog1.FileName));
+                perceptron = Perceptron.FromString(data.perceptron_str);
+                perceptron_studied_leters = data.perceptron_studied_leters;
+            }
+        }
+
+        private void SavePerceptronToolStripMenuItem_Click(object sender, EventArgs e) {
+            if (saveFileDialog2.ShowDialog() == System.Windows.Forms.DialogResult.OK) {
+                PerceptronData data = new PerceptronData();
+                data.perceptron_str = perceptron.ToString();
+                data.perceptron_studied_leters = perceptron_studied_leters;
+                System.IO.File.WriteAllText(openFileDialog1.FileName, JsonConvert.SerializeObject(data));
+            }
+        }
         private void textBox1_TextChanged(object sender, EventArgs e) {
             draw_button.Enabled = textBox1.Text.Length > 0;
             refresh_add_to_study_set_button_enable();
@@ -159,79 +196,84 @@ namespace Perceptron
             }
         }
 
-        void drawen() {
-            pictureBox2.Image = new Bitmap(pictureBox2.Width, pictureBox2.Height);
+        private static bool[,] get_sensor_field(Bitmap bmp, Size sensor_field_size) {
+            bool[,] sensor_field = new bool[sensor_field_size.Width, sensor_field_size.Height];
+            //it would be better to use unsafe code
+            BitmapData bmpData = bmp.LockBits(new Rectangle(0, 0, bmp.Width, bmp.Height), ImageLockMode.ReadOnly, bmp.PixelFormat);
+            int size = bmpData.Stride * bmpData.Height;
+            byte[] data = new byte[size];
+            System.Runtime.InteropServices.Marshal.Copy(bmpData.Scan0, data, 0, size);
+            //System.Runtime.InteropServices.Marshal.Copy(data, 0, bmpData.Scan0, data.Length);
+            bmp.UnlockBits(bmpData);
+            int min_x = bmp.Width, min_y = bmp.Height, max_x = 0, max_y = 0;
+            for (int x = 0; x < bmp.Width; x++)
             {
-                //it would be better to use unsafe code
-                Bitmap bmp = (Bitmap)pictureBox1.Image;
-                BitmapData bmpData = bmp.LockBits(new Rectangle(0, 0, bmp.Width, bmp.Height), ImageLockMode.ReadOnly, bmp.PixelFormat);
-                int size = bmpData.Stride * bmpData.Height;
-                byte[] data = new byte[size];
-                System.Runtime.InteropServices.Marshal.Copy(bmpData.Scan0, data, 0, size);
-                //System.Runtime.InteropServices.Marshal.Copy(data, 0, bmpData.Scan0, data.Length);
-                bmp.UnlockBits(bmpData);
-                int min_x = bmp.Width, min_y = bmp.Height, max_x = 0, max_y = 0;
-                for (int x = 0; x < bmp.Width; x++) {
-                    for (int y = 0; y < bmp.Height; y++) {
-                        if (data[(y * bmp.Width + x)*4 + 3] > 0) {
-                            min_x = Math.Min(min_x, x);
-                            min_y = Math.Min(min_y, y);
-                            max_x = Math.Max(max_x, x);
-                            max_y = Math.Max(max_y, y);
-                        }
+                for (int y = 0; y < bmp.Height; y++)
+                {
+                    if (data[(y * bmp.Width + x) * 4 + 3] > 0)
+                    {
+                        min_x = Math.Min(min_x, x);
+                        min_y = Math.Min(min_y, y);
+                        max_x = Math.Max(max_x, x);
+                        max_y = Math.Max(max_y, y);
                     }
                 }
+            }
 
-                if (min_x > max_x || min_y > max_y || max_x == 0 || max_y == 0) {
-                    empty_picture = true;
-                    return;
-                } else empty_picture = false;
+            if (min_x > max_x || min_y > max_y || max_x == 0 || max_y == 0) return null;
 
-                if (sensor_field == null) return;
+            int space_width = (max_x - min_x) + 1;
+            int space_height = (max_y - min_y) + 1;
 
-                int space_width = (max_x - min_x) + 1;
-                int space_height = (max_y - min_y) + 1;
+            float width = space_width / (float)sensor_field.GetLength(0);
+            float height = space_height / (float)sensor_field.GetLength(1);
 
-                float width = space_width / (float)sensor_field.GetLength(0);
-                float height = space_height / (float)sensor_field.GetLength(1);
-
-                for (int x = 0; x < sensor_field.GetLength(0); x++) {
-                    for (int y = 0; y < sensor_field.GetLength(1); y++) {
-                        sensor_field[x, y] = false;
-                    }
+            for (int x = 0; x < sensor_field.GetLength(0); x++) {
+                for (int y = 0; y < sensor_field.GetLength(1); y++) {
+                    sensor_field[x, y] = false;
                 }
+            }
 
-                for (int x = 0; x < sensor_field.GetLength(0); x++) {
-                    int _x_lim = Math.Min(Math.Max((int)((x + 1) * width) + min_x, (int)(x * width) + min_x + 1), max_x + 1);
-                    for (int y = 0; y < sensor_field.GetLength(1); y++) {
-                        int _y_lim = Math.Min(Math.Max((int)((y + 1)*height) + min_y, (int)(y * height) + min_y + 1), max_y + 1);
-                        for (int _x = (int)(x*width) + min_x; _x < _x_lim; _x++) {
-                            for (int _y = (int)(y*height) + min_y; _y < _y_lim; _y++) {
-                                if (data[(_y * bmp.Width + _x) * 4 + 3] > 0) {
-                                    sensor_field[x, y] = true;
-                                    break;
-                                }
+            for (int x = 0; x < sensor_field.GetLength(0); x++) {
+                int _x_lim = Math.Min(Math.Max((int)((x + 1) * width) + min_x, (int)(x * width) + min_x + 1), max_x + 1);
+                for (int y = 0; y < sensor_field.GetLength(1); y++) {
+                    int _y_lim = Math.Min(Math.Max((int)((y + 1) * height) + min_y, (int)(y * height) + min_y + 1), max_y + 1);
+                    for (int _x = (int)(x * width) + min_x; _x < _x_lim; _x++) {
+                        for (int _y = (int)(y * height) + min_y; _y < _y_lim; _y++) {
+                            if (data[(_y * bmp.Width + _x) * 4 + 3] > 0) {
+                                sensor_field[x, y] = true;
+                                break;
                             }
-                            if (sensor_field[x, y]) break;
                         }
+                        if (sensor_field[x, y]) break;
                     }
                 }
+            }
+            return sensor_field;
+        }
 
+        void drawen() {
+            if (perceptron == null) return;
+            pictureBox2.Image = new Bitmap(pictureBox2.Width, pictureBox2.Height);
+            bool[,] sensor_field = get_sensor_field((Bitmap)pictureBox1.Image, sensor_field_size);
+            if (sensor_field == null) {
+                empty_picture = true;
+                return;
             }
-            {
-                float width = pictureBox2.Image.Width / (float)sensor_field.GetLength(0);
-                float height = pictureBox2.Image.Height / (float)sensor_field.GetLength(1);
-                Bitmap bmp = (Bitmap)pictureBox2.Image;
-                Brush black_brush = new SolidBrush(Color.Black);
-                using (Graphics g = Graphics.FromImage(bmp)) {
-                    for (int x = 0; x < sensor_field.GetLength(0); x++) {
-                        for (int y = 0; y < sensor_field.GetLength(1); y++) {
-                            if (sensor_field[x, y]) g.FillRectangle(black_brush, new RectangleF(width * x, height * y, width, height));
-                        }
+            empty_picture = false;
+
+            float width = pictureBox2.Image.Width / (float)sensor_field.GetLength(0);
+            float height = pictureBox2.Image.Height / (float)sensor_field.GetLength(1);
+            Bitmap bmp = (Bitmap)pictureBox2.Image;
+            Brush black_brush = new SolidBrush(Color.Black);
+            using (Graphics g = Graphics.FromImage(bmp)) {
+                for (int x = 0; x < sensor_field.GetLength(0); x++) {
+                    for (int y = 0; y < sensor_field.GetLength(1); y++) {
+                        if (sensor_field[x, y]) g.FillRectangle(black_brush, new RectangleF(width * x, height * y, width, height));
                     }
                 }
-                pictureBox2.Image = bmp;
             }
+            pictureBox2.Image = bmp;
         }
 
         private void add_to_study_set_button_Click(object sender, EventArgs e) {
@@ -240,14 +282,17 @@ namespace Perceptron
             study_set[textBox1.Text[0]].Add(new Bitmap((Bitmap)pictureBox1.Image));
             viewStudySetToolStripMenuItem.Enabled = true;
             clearToolStripMenuItem.Enabled = true;
+            createToolStripMenuItem.Enabled = true;
+            createToolStripMenuItem.Enabled = _perceptron_ == null;
         }
 
         private void viewStudySetToolStripMenuItem_Click(object sender, EventArgs e) {
-            StudySetViewer form = new StudySetViewer(study_set);
-            form.ShowDialog();
+            studySetViewer.remove_button_enable = true;
+            studySetViewer.ShowDialog();
             if (study_set.Count == 0) {
                 viewStudySetToolStripMenuItem.Enabled = false;
                 clearToolStripMenuItem.Enabled = false;
+                createToolStripMenuItem.Enabled = false;
             }
         }
 
@@ -255,6 +300,57 @@ namespace Perceptron
             study_set.Clear();
             viewStudySetToolStripMenuItem.Enabled = false;
             clearToolStripMenuItem.Enabled = false;
+        }
+
+        private void createPerceptronToolStripMenuItem_Click(object sender, EventArgs e) {
+            parametersSeter.ShowDialog();
+            if (!parametersSeter.ok_presed) {
+                var parameters = parametersSeter.parameters;
+                sensor_field_size = new Size(parameters.sinaps_field_width, parameters.sinaps_field_height);
+                uint[] Neuron_layers_sizes = new uint[1 + parameters.hidden_layers_count + 1];
+                Neuron_layers_sizes[0] = (uint)(parameters.sinaps_field_width * parameters.sinaps_field_height);
+                for (int _i = 1; _i <= parameters.hidden_layers_count; _i++) {
+                    Neuron_layers_sizes[_i] = (uint)parameters.hidden_layer_size;
+                }
+                Neuron_layers_sizes[parameters.hidden_layers_count + 1] = (uint)study_set.Count();
+                perceptron = new Perceptron(Neuron_layers_sizes);
+
+                int paterns_count = 0;
+                foreach (var pair in study_set) {
+                    paterns_count += pair.Value.Count;
+                }
+                Perceptron.Patern[] paterns = new Perceptron.Patern[paterns_count];
+                int i = 0;
+                var sinaps_field_size = new Size(parameters.sinaps_field_width, parameters.sinaps_field_height);
+                int leter_number = 0;
+                foreach (var pair in study_set) {
+                    double[] outputs = new double[study_set.Count()];
+                    outputs[leter_number++] = 1;
+                    foreach (Bitmap bmp in pair.Value) {
+                        bool[,] sensor_field = get_sensor_field(bmp, sinaps_field_size);
+                        if (sensor_field != null)
+                        {
+                            Perceptron.Patern patern = new Perceptron.Patern();
+                            patern.inputs = new double[Neuron_layers_sizes[0]];
+                            int j = 0;
+                            foreach (bool obj in sensor_field) {
+                                patern.inputs[j++] = obj ? 1 : 0;
+                            }
+                            patern.outputs = outputs;
+                            paterns[i] = patern;
+                        }
+                        i++;
+                    }
+                }
+                perceptron.study(paterns);
+
+                cleanToolStripMenuItem.Enabled = true;
+            }
+        }
+
+        private void cleanToolStripMenuItem_Click(object sender, EventArgs e) {
+            perceptron = null;
+            perceptron_studied_leters = null;
         }
 
         //private byte GetBytesPerPixel(PixelFormat pixelFormat) {

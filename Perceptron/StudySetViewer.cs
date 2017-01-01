@@ -31,6 +31,7 @@ namespace Perceptron
                 }
             }
         }
+        public bool remove_button_enable = true;
 
         List<func> funks_holder;
         private Dictionary<char, List<Bitmap>> study_set;
@@ -45,7 +46,7 @@ namespace Perceptron
                 foreach (Bitmap bmp in pare.Value) {
                     Panel row = new Panel();
                     row.Margin = new Padding(5, 0, 5, 0);
-                    row.Dock = DockStyle.Bottom;
+                    row.Dock = DockStyle.Top;
                     {
                         Panel left = new Panel();
                         left.Dock = DockStyle.Left;
@@ -62,6 +63,7 @@ namespace Perceptron
                             func deleter = new func(study_set, pare.Key, bmp, row);
                             funks_holder.Add(deleter);
                             remove.Click += new EventHandler(deleter.dell);
+                            remove.Enabled = remove_button_enable;
 
                         left.Controls.Add(remove);
                         left.Controls.Add(leter);
@@ -80,8 +82,13 @@ namespace Perceptron
                         row.BorderStyle = BorderStyle.FixedSingle;
                     }
                     panel1.Controls.Add(row);
+                    row.BringToFront();
                 }
             }
+        }
+
+        private void StudySetViewer_FormClosed(object sender, FormClosedEventArgs e) {
+            panel1.Controls.Clear();
         }
     }
 }

@@ -59,6 +59,12 @@
     </Compile>
     <Compile Include="Neuron.cs" />
     <Compile Include="Perceptron.cs" />
+    <Compile Include="PerceptronParametersSeter.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="PerceptronParametersSeter.Designer.cs">
+      <DependentUpon>PerceptronParametersSeter.cs</DependentUpon>
+    </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="StudySetViewer.cs">
@@ -69,6 +75,9 @@
     </Compile>
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="PerceptronParametersSeter.resx">
+      <DependentUpon>PerceptronParametersSeter.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -82,6 +91,7 @@
     <EmbeddedResource Include="StudySetViewer.resx">
       <DependentUpon>StudySetViewer.cs</DependentUpon>
     </EmbeddedResource>
+    <None Include="ClassDiagram1.cd" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>

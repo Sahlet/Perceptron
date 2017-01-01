@@ -50,6 +50,7 @@
             this.Controls.Add(this.panel1);
             this.Name = "StudySetViewer";
             this.Text = "Study Set";
+            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.StudySetViewer_FormClosed);
             this.Load += new System.EventHandler(this.StudySetViewer_Load);
             this.ResumeLayout(false);
 

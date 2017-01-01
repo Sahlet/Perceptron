@@ -47,7 +47,6 @@
             this.clearToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.perceptronToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.createToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.studyToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.cleanToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.fontToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
@@ -183,6 +182,7 @@
             // 
             // SavePictureMenuItem
             // 
+            this.SavePictureMenuItem.Enabled = false;
             this.SavePictureMenuItem.Name = "SavePictureMenuItem";
             this.SavePictureMenuItem.Size = new System.Drawing.Size(161, 22);
             this.SavePictureMenuItem.Text = "Sava Picture";
@@ -193,12 +193,15 @@
             this.LoadPerceptronMenuItem.Name = "LoadPerceptronMenuItem";
             this.LoadPerceptronMenuItem.Size = new System.Drawing.Size(161, 22);
             this.LoadPerceptronMenuItem.Text = "Load Perceptron";
+            this.LoadPerceptronMenuItem.Click += new System.EventHandler(this.LoadPerceptronMenuItem_Click);
             // 
             // SavePerceptronToolStripMenuItem
             // 
+            this.SavePerceptronToolStripMenuItem.Enabled = false;
             this.SavePerceptronToolStripMenuItem.Name = "SavePerceptronToolStripMenuItem";
             this.SavePerceptronToolStripMenuItem.Size = new System.Drawing.Size(161, 22);
             this.SavePerceptronToolStripMenuItem.Text = "Save Perceptron";
+            this.SavePerceptronToolStripMenuItem.Click += new System.EventHandler(this.SavePerceptronToolStripMenuItem_Click);
             // 
             // studySetToolStripMenuItem
             // 
@@ -213,7 +216,7 @@
             // 
             this.viewStudySetToolStripMenuItem.Enabled = false;
             this.viewStudySetToolStripMenuItem.Name = "viewStudySetToolStripMenuItem";
-            this.viewStudySetToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.viewStudySetToolStripMenuItem.Size = new System.Drawing.Size(104, 22);
             this.viewStudySetToolStripMenuItem.Text = "View";
             this.viewStudySetToolStripMenuItem.Click += new System.EventHandler(this.viewStudySetToolStripMenuItem_Click);
             // 
@@ -221,7 +224,7 @@
             // 
             this.clearToolStripMenuItem.Enabled = false;
             this.clearToolStripMenuItem.Name = "clearToolStripMenuItem";
-            this.clearToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.clearToolStripMenuItem.Size = new System.Drawing.Size(104, 22);
             this.clearToolStripMenuItem.Text = "Clean";
             this.clearToolStripMenuItem.Click += new System.EventHandler(this.clearToolStripMenuItem_Click);
             // 
@@ -229,7 +232,6 @@
             // 
             this.perceptronToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.createToolStripMenuItem,
-            this.studyToolStripMenuItem1,
             this.cleanToolStripMenuItem});
             this.perceptronToolStripMenuItem.Name = "perceptronToolStripMenuItem";
             this.perceptronToolStripMenuItem.Size = new System.Drawing.Size(77, 20);
@@ -237,23 +239,19 @@
             // 
             // createToolStripMenuItem
             // 
+            this.createToolStripMenuItem.Enabled = false;
             this.createToolStripMenuItem.Name = "createToolStripMenuItem";
-            this.createToolStripMenuItem.Size = new System.Drawing.Size(108, 22);
+            this.createToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.createToolStripMenuItem.Text = "Create";
-            // 
-            // studyToolStripMenuItem1
-            // 
-            this.studyToolStripMenuItem1.Enabled = false;
-            this.studyToolStripMenuItem1.Name = "studyToolStripMenuItem1";
-            this.studyToolStripMenuItem1.Size = new System.Drawing.Size(108, 22);
-            this.studyToolStripMenuItem1.Text = "Study";
+            this.createToolStripMenuItem.Click += new System.EventHandler(this.createPerceptronToolStripMenuItem_Click);
             // 
             // cleanToolStripMenuItem
             // 
             this.cleanToolStripMenuItem.Enabled = false;
             this.cleanToolStripMenuItem.Name = "cleanToolStripMenuItem";
-            this.cleanToolStripMenuItem.Size = new System.Drawing.Size(108, 22);
+            this.cleanToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.cleanToolStripMenuItem.Text = "Clean";
+            this.cleanToolStripMenuItem.Click += new System.EventHandler(this.cleanToolStripMenuItem_Click);
             // 
             // fontToolStripMenuItem
             // 
@@ -317,7 +315,6 @@
         private System.Windows.Forms.ToolStripMenuItem clearToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem perceptronToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem createToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem studyToolStripMenuItem1;
         private System.Windows.Forms.ToolStripMenuItem cleanToolStripMenuItem;
         private System.Windows.Forms.FontDialog fontDialog1;
         private System.Windows.Forms.ToolStripMenuItem fontToolStripMenuItem;
