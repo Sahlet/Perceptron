@@ -10,4 +10,3 @@ D:\Книги\Прога\Даша\7 семестр\Працептрон\Perceptr
 D:\Книги\Прога\Даша\7 семестр\Працептрон\Perceptron\Perceptron\obj\Debug\Perceptron.csproj.GenerateResource.Cache
 D:\Книги\Прога\Даша\7 семестр\Працептрон\Perceptron\Perceptron\obj\Debug\Perceptron.exe
 D:\Книги\Прога\Даша\7 семестр\Працептрон\Perceptron\Perceptron\obj\Debug\Perceptron.pdb
-D:\Книги\Прога\Даша\7 семестр\Працептрон\Perceptron\Perceptron\obj\Debug\Perceptron.csprojResolveAssemblyReference.cache
