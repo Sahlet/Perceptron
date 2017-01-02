@@ -39,10 +39,13 @@
             this.label4 = new System.Windows.Forms.Label();
             this.button1 = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
+            this.label6 = new System.Windows.Forms.Label();
+            this.epsUpDown = new System.Windows.Forms.NumericUpDown();
             ((System.ComponentModel.ISupportInitialize)(this.sinaps_field_width)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.sinaps_field_height)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.hidden_layers_count)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.hidden_layer_size)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.epsUpDown)).BeginInit();
             this.SuspendLayout();
             // 
             // sinaps_field_width
@@ -62,7 +65,7 @@
             this.sinaps_field_width.Size = new System.Drawing.Size(47, 20);
             this.sinaps_field_width.TabIndex = 0;
             this.sinaps_field_width.Value = new decimal(new int[] {
-            16,
+            6,
             0,
             0,
             0});
@@ -93,7 +96,7 @@
             this.sinaps_field_height.Size = new System.Drawing.Size(47, 20);
             this.sinaps_field_height.TabIndex = 2;
             this.sinaps_field_height.Value = new decimal(new int[] {
-            16,
+            6,
             0,
             0,
             0});
@@ -110,7 +113,7 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(23, 63);
+            this.label3.Location = new System.Drawing.Point(23, 44);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(101, 13);
             this.label3.TabIndex = 7;
@@ -118,7 +121,7 @@
             // 
             // hidden_layers_count
             // 
-            this.hidden_layers_count.Location = new System.Drawing.Point(129, 61);
+            this.hidden_layers_count.Location = new System.Drawing.Point(129, 42);
             this.hidden_layers_count.Minimum = new decimal(new int[] {
             1,
             0,
@@ -136,7 +139,7 @@
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(23, 91);
+            this.label5.Location = new System.Drawing.Point(23, 72);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(87, 13);
             this.label5.TabIndex = 11;
@@ -144,7 +147,7 @@
             // 
             // hidden_layer_size
             // 
-            this.hidden_layer_size.Location = new System.Drawing.Point(129, 89);
+            this.hidden_layer_size.Location = new System.Drawing.Point(129, 70);
             this.hidden_layer_size.Maximum = new decimal(new int[] {
             24,
             0,
@@ -193,11 +196,50 @@
             this.button2.UseVisualStyleBackColor = true;
             this.button2.Click += new System.EventHandler(this.button2_Click);
             // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(23, 103);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(77, 13);
+            this.label6.TabIndex = 17;
+            this.label6.Text = "(accuracy) eps";
+            // 
+            // epsUpDown
+            // 
+            this.epsUpDown.DecimalPlaces = 4;
+            this.epsUpDown.Increment = new decimal(new int[] {
+            1,
+            0,
+            0,
+            262144});
+            this.epsUpDown.Location = new System.Drawing.Point(129, 101);
+            this.epsUpDown.Maximum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            65536});
+            this.epsUpDown.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            262144});
+            this.epsUpDown.Name = "epsUpDown";
+            this.epsUpDown.Size = new System.Drawing.Size(65, 20);
+            this.epsUpDown.TabIndex = 18;
+            this.epsUpDown.Value = new decimal(new int[] {
+            5,
+            0,
+            0,
+            196608});
+            // 
             // PerceptronParametersSeter
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(284, 196);
+            this.Controls.Add(this.epsUpDown);
+            this.Controls.Add(this.label6);
             this.Controls.Add(this.button2);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.label4);
@@ -216,6 +258,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.sinaps_field_height)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.hidden_layers_count)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.hidden_layer_size)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.epsUpDown)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -234,5 +277,7 @@
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.NumericUpDown epsUpDown;
     }
 }

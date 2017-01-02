@@ -16,6 +16,7 @@ namespace Perceptron
             public int sinaps_field_height = 16;
             public int hidden_layers_count = 1;
             public int hidden_layer_size = 10;
+            public double eps = 0.005;
 
             public bool Equal(Parameters parameters) {
                 if (parameters == null) return false;
@@ -23,7 +24,8 @@ namespace Perceptron
                 parameters.sinaps_field_width == sinaps_field_width &&
                 parameters.sinaps_field_height == sinaps_field_height &&
                 parameters.hidden_layers_count == hidden_layers_count &&
-                parameters.hidden_layer_size == hidden_layer_size;
+                parameters.hidden_layer_size == hidden_layer_size &&
+                parameters.eps == eps;
             }
 
             public Parameters get_copy() {
@@ -32,6 +34,7 @@ namespace Perceptron
                 parameters.sinaps_field_height = sinaps_field_height;
                 parameters.hidden_layers_count = hidden_layers_count;
                 parameters.hidden_layer_size = hidden_layer_size;
+                parameters.eps = eps;
                 return parameters;
             }
         }
@@ -50,7 +53,9 @@ namespace Perceptron
             parameters.sinaps_field_height = Convert.ToInt32(sinaps_field_height.Value);
             parameters.hidden_layers_count = Convert.ToInt32(hidden_layers_count.Value);
             parameters.hidden_layer_size = Convert.ToInt32(hidden_layer_size.Value);
+            parameters.eps = (double)epsUpDown.Value;
             ok_presed = true;
+            Close();
         }
 
         private void button2_Click(object sender, EventArgs e) {

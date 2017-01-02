@@ -12,7 +12,7 @@ namespace Perceptron {
         private class Inputer {
             public double value = 0;
             public double call(double x, double alpha = 0.5) {
-                return Neuron.activation_functions.sigmoid(value, alpha);
+                return value;
             }
         }
         private Inputer[] inputers;
@@ -32,7 +32,7 @@ namespace Perceptron {
                 if (i > 0) {
                     double[] weights = new double[Neuron_layers_sizes[i - 1]];
                     for (int j = 0; j < Neuron_layers_sizes[i]; j++) {
-                        neurons_data[i][j].weights = weights;
+                        neurons_data[i][j] = new NeuronData(weights);
                     }
                 }
             }
@@ -61,6 +61,7 @@ namespace Perceptron {
             inputers = new Inputer[neurons[0].Length];
             layers[0] = new Neuron[inputers.Length];
             for (int j = 0; j < inputers.Length; j++) {
+                inputers[j] = new Inputer();
                 Neuron neuron = new Neuron(new Neuron.activation_functions.activation_function_type(inputers[j].call));
                 layers[0][j] = neuron;
                 neuron.children_count = Convert.ToUInt32(neurons[1].Length);
@@ -120,7 +121,7 @@ namespace Perceptron {
             public double[] inputs;
             public double[] outputs;
         };
-        public void study(Patern[] paterns, double eps = 0.0001, uint max_epoch = uint.MaxValue) {
+        public void study(Patern[] paterns, double eps = 0.005, uint max_epoch = uint.MaxValue) {
             if (paterns == null || paterns.Length == 0 || max_epoch == 0) throw new Exception("bad args");
             Neuron[] outers = layers[layers.Length - 1];
             Neuron[] synapses = layers[0];
@@ -146,7 +147,7 @@ namespace Perceptron {
                     set_input(patern.inputs);
                     double[] outs = get_output();
                     for (int i = 0; i < outs.Length; i++) {
-                        double err = -(patern.outputs[i] - outs[i]);
+                        double err = (patern.outputs[i] - outs[i]);
                         outers[i].BackPropagation(err);
                         global_ERROR += err * err;
                     }

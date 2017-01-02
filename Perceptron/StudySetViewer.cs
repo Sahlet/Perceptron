@@ -45,7 +45,7 @@ namespace Perceptron
             foreach (var pare in study_set) {
                 foreach (Bitmap bmp in pare.Value) {
                     Panel row = new Panel();
-                    row.Margin = new Padding(5, 0, 5, 0);
+                    row.Margin = new Padding(5, 5, 5, 5);
                     row.Dock = DockStyle.Top;
                     {
                         Panel left = new Panel();

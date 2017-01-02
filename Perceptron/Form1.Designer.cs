@@ -134,6 +134,7 @@
             this.identify_picture_button.TabIndex = 0;
             this.identify_picture_button.Text = " identify";
             this.identify_picture_button.UseVisualStyleBackColor = true;
+            this.identify_picture_button.Click += new System.EventHandler(this.identify_picture_button_Click);
             // 
             // pictureBox1
             // 
@@ -241,7 +242,7 @@
             // 
             this.createToolStripMenuItem.Enabled = false;
             this.createToolStripMenuItem.Name = "createToolStripMenuItem";
-            this.createToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.createToolStripMenuItem.Size = new System.Drawing.Size(108, 22);
             this.createToolStripMenuItem.Text = "Create";
             this.createToolStripMenuItem.Click += new System.EventHandler(this.createPerceptronToolStripMenuItem_Click);
             // 
@@ -249,7 +250,7 @@
             // 
             this.cleanToolStripMenuItem.Enabled = false;
             this.cleanToolStripMenuItem.Name = "cleanToolStripMenuItem";
-            this.cleanToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.cleanToolStripMenuItem.Size = new System.Drawing.Size(108, 22);
             this.cleanToolStripMenuItem.Text = "Clean";
             this.cleanToolStripMenuItem.Click += new System.EventHandler(this.cleanToolStripMenuItem_Click);
             // 

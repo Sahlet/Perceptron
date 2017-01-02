@@ -25,7 +25,7 @@ namespace Perceptron
             }
         }
         private Dictionary<char, List<Bitmap>> study_set = new Dictionary<char, List<Bitmap>>();
-        private Dictionary<char, List<Bitmap>>.KeyCollection perceptron_studied_leters;
+        private char[] perceptron_studied_leters;
         private Size sensor_field_size;
         private PerceptronParametersSeter parametersSeter;
         private Point startP;
@@ -141,7 +141,7 @@ namespace Perceptron
         }
         private class PerceptronData {
             public string perceptron_str;
-            public Dictionary<char, List<Bitmap>>.KeyCollection perceptron_studied_leters;
+            public char[] perceptron_studied_leters;
         }
 
         private void LoadPerceptronMenuItem_Click(object sender, EventArgs e) {
@@ -300,11 +300,12 @@ namespace Perceptron
             study_set.Clear();
             viewStudySetToolStripMenuItem.Enabled = false;
             clearToolStripMenuItem.Enabled = false;
+            createToolStripMenuItem.Enabled = false;
         }
 
         private void createPerceptronToolStripMenuItem_Click(object sender, EventArgs e) {
             parametersSeter.ShowDialog();
-            if (!parametersSeter.ok_presed) {
+            if (parametersSeter.ok_presed) {
                 var parameters = parametersSeter.parameters;
                 sensor_field_size = new Size(parameters.sinaps_field_width, parameters.sinaps_field_height);
                 uint[] Neuron_layers_sizes = new uint[1 + parameters.hidden_layers_count + 1];
@@ -315,19 +316,21 @@ namespace Perceptron
                 Neuron_layers_sizes[parameters.hidden_layers_count + 1] = (uint)study_set.Count();
                 perceptron = new Perceptron(Neuron_layers_sizes);
 
+                perceptron_studied_leters = new char[study_set.Count];
                 int paterns_count = 0;
                 foreach (var pair in study_set) {
                     paterns_count += pair.Value.Count;
                 }
                 Perceptron.Patern[] paterns = new Perceptron.Patern[paterns_count];
                 int i = 0;
-                var sinaps_field_size = new Size(parameters.sinaps_field_width, parameters.sinaps_field_height);
                 int leter_number = 0;
                 foreach (var pair in study_set) {
-                    double[] outputs = new double[study_set.Count()];
-                    outputs[leter_number++] = 1;
+                    double[] outputs = new double[study_set.Count];
+                    outputs[leter_number] = 1;
+                    perceptron_studied_leters[leter_number] = pair.Key;
+                    leter_number++;
                     foreach (Bitmap bmp in pair.Value) {
-                        bool[,] sensor_field = get_sensor_field(bmp, sinaps_field_size);
+                        bool[,] sensor_field = get_sensor_field(bmp, sensor_field_size);
                         if (sensor_field != null)
                         {
                             Perceptron.Patern patern = new Perceptron.Patern();
@@ -342,15 +345,37 @@ namespace Perceptron
                         i++;
                     }
                 }
-                perceptron.study(paterns);
+                perceptron.study(paterns, parameters.eps);
 
                 cleanToolStripMenuItem.Enabled = true;
+                drawen();
+
+                MessageBox.Show("Perceptron created for " + perceptron.Epoch + " Epochs\n\rwith eps = " + parameters.eps);
             }
         }
 
         private void cleanToolStripMenuItem_Click(object sender, EventArgs e) {
             perceptron = null;
             perceptron_studied_leters = null;
+            pictureBox2.Image = new Bitmap(pictureBox2.Width, pictureBox2.Height);
+        }
+
+        private void identify_picture_button_Click(object sender, EventArgs e) {
+            bool[,] sensor_field = get_sensor_field((Bitmap)pictureBox1.Image, sensor_field_size);
+            if (sensor_field != null) {
+                double[] inputs = new double[sensor_field_size.Width * sensor_field_size.Height];
+                int j = 0;
+                foreach (bool obj in sensor_field) {
+                    inputs[j++] = obj ? 1 : 0;
+                }
+                perceptron.set_input(inputs);
+                var outputs = perceptron.get_output();
+                int index_of_max = 0;
+                for (j = 0; j < outputs.Length; j++) {
+                    if (outputs[index_of_max] < outputs[j]) index_of_max = j;
+                }
+                MessageBox.Show("It is symbol   " + perceptron_studied_leters[index_of_max]);
+            }
         }
 
         //private byte GetBytesPerPixel(PixelFormat pixelFormat) {

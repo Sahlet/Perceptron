@@ -70,7 +70,7 @@ namespace Perceptron
             if (rand == null) rand = new Random((int)System.DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1)).TotalSeconds);
             foreach (Link link in parents) {
                 link.neuron.start_init(rand);
-                link.weight = 0.01 + rand.NextDouble() * 0.2;
+                link.weight = 0.1 + rand.NextDouble() * 0.1;
             }
         }
         //поднять флаг need_recount (чтоб в следующий раз пересчитать все)
@@ -109,7 +109,8 @@ namespace Perceptron
                 value_shift *= 2*alpha*output*(1 - output);
                 foreach (Link link in parents) {
                     link.neuron.BackPropagation(value_shift * link.weight);
-                    link.weight_delta = alpha * link.weight_delta + (1 - alpha) * speed * value_shift * link.neuron.output;
+                    link.weight_delta = speed * value_shift * link.neuron.output;
+                    //link.weight_delta = alpha * link.weight_delta + (1 - alpha) * speed * value_shift * link.neuron.output;
                     link.weight += link.weight_delta;
                 }
                 value_shift = 0;
