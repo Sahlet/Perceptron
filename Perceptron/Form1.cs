@@ -140,15 +140,18 @@ namespace Perceptron
             }
         }
         private class PerceptronData {
+            public Size sensor_field_size;
             public string perceptron_str;
             public char[] perceptron_studied_leters;
         }
 
         private void LoadPerceptronMenuItem_Click(object sender, EventArgs e) {
             if (openFileDialog2.ShowDialog() == System.Windows.Forms.DialogResult.OK) {
-                PerceptronData data = JsonConvert.DeserializeObject<PerceptronData>(System.IO.File.ReadAllText(openFileDialog1.FileName));
+                PerceptronData data = JsonConvert.DeserializeObject<PerceptronData>(System.IO.File.ReadAllText(openFileDialog2.FileName));
                 perceptron = Perceptron.FromString(data.perceptron_str);
                 perceptron_studied_leters = data.perceptron_studied_leters;
+                sensor_field_size = data.sensor_field_size;
+                drawen();
             }
         }
 
@@ -157,7 +160,8 @@ namespace Perceptron
                 PerceptronData data = new PerceptronData();
                 data.perceptron_str = perceptron.ToString();
                 data.perceptron_studied_leters = perceptron_studied_leters;
-                System.IO.File.WriteAllText(openFileDialog1.FileName, JsonConvert.SerializeObject(data));
+                data.sensor_field_size = sensor_field_size;
+                System.IO.File.WriteAllText(saveFileDialog2.FileName, JsonConvert.SerializeObject(data));
             }
         }
         private void textBox1_TextChanged(object sender, EventArgs e) {
