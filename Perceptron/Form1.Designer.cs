@@ -54,6 +54,9 @@
             this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
             this.saveFileDialog2 = new System.Windows.Forms.SaveFileDialog();
             this.fontDialog1 = new System.Windows.Forms.FontDialog();
+            this.loadStudySetToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.saveStudySetToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
@@ -208,7 +211,9 @@
             // 
             this.studySetToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.viewStudySetToolStripMenuItem,
-            this.clearToolStripMenuItem});
+            this.clearToolStripMenuItem,
+            this.loadStudySetToolStripMenuItem,
+            this.saveStudySetToolStripMenuItem});
             this.studySetToolStripMenuItem.Name = "studySetToolStripMenuItem";
             this.studySetToolStripMenuItem.Size = new System.Drawing.Size(68, 20);
             this.studySetToolStripMenuItem.Text = "Study Set";
@@ -217,7 +222,7 @@
             // 
             this.viewStudySetToolStripMenuItem.Enabled = false;
             this.viewStudySetToolStripMenuItem.Name = "viewStudySetToolStripMenuItem";
-            this.viewStudySetToolStripMenuItem.Size = new System.Drawing.Size(104, 22);
+            this.viewStudySetToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.viewStudySetToolStripMenuItem.Text = "View";
             this.viewStudySetToolStripMenuItem.Click += new System.EventHandler(this.viewStudySetToolStripMenuItem_Click);
             // 
@@ -225,7 +230,7 @@
             // 
             this.clearToolStripMenuItem.Enabled = false;
             this.clearToolStripMenuItem.Name = "clearToolStripMenuItem";
-            this.clearToolStripMenuItem.Size = new System.Drawing.Size(104, 22);
+            this.clearToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.clearToolStripMenuItem.Text = "Clean";
             this.clearToolStripMenuItem.Click += new System.EventHandler(this.clearToolStripMenuItem_Click);
             // 
@@ -268,6 +273,21 @@
             // openFileDialog2
             // 
             this.openFileDialog2.FileName = "openFileDialog2";
+            // 
+            // loadStudySetToolStripMenuItem
+            // 
+            this.loadStudySetToolStripMenuItem.Name = "loadStudySetToolStripMenuItem";
+            this.loadStudySetToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.loadStudySetToolStripMenuItem.Text = "Load";
+            this.loadStudySetToolStripMenuItem.Click += new System.EventHandler(this.loadStudySetToolStripMenuItem_Click);
+            // 
+            // saveStudySetToolStripMenuItem
+            // 
+            this.saveStudySetToolStripMenuItem.Enabled = false;
+            this.saveStudySetToolStripMenuItem.Name = "saveStudySetToolStripMenuItem";
+            this.saveStudySetToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.saveStudySetToolStripMenuItem.Text = "Save";
+            this.saveStudySetToolStripMenuItem.Click += new System.EventHandler(this.saveStudySetToolStripMenuItem_Click);
             // 
             // Form1
             // 
@@ -319,6 +339,9 @@
         private System.Windows.Forms.ToolStripMenuItem cleanToolStripMenuItem;
         private System.Windows.Forms.FontDialog fontDialog1;
         private System.Windows.Forms.ToolStripMenuItem fontToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem loadStudySetToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem saveStudySetToolStripMenuItem;
+        private System.Windows.Forms.FolderBrowserDialog folderBrowserDialog1;
     }
 }
 

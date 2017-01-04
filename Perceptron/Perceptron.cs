@@ -38,6 +38,7 @@ namespace Perceptron {
             }
 
             construct(neurons_data);
+            reinit();
         }
 
         public Perceptron(NeuronData[][] neurons) {
@@ -81,8 +82,6 @@ namespace Perceptron {
                     }
                 }
             }
-
-            reinit();
         }
         private uint epoch;
         //количество эпох обучения

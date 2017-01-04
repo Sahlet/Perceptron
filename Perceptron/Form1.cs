@@ -82,6 +82,8 @@ namespace Perceptron
             saveFileDialog2.FilterIndex = 1;
             saveFileDialog2.RestoreDirectory = true;
 
+            folderBrowserDialog1.SelectedPath = Environment.CurrentDirectory;
+
             fontDialog1.Font = new Font("Arial", 40f);
 
             studySetViewer = new StudySetViewer(study_set);
@@ -286,7 +288,7 @@ namespace Perceptron
             study_set[textBox1.Text[0]].Add(new Bitmap((Bitmap)pictureBox1.Image));
             viewStudySetToolStripMenuItem.Enabled = true;
             clearToolStripMenuItem.Enabled = true;
-            createToolStripMenuItem.Enabled = true;
+            saveStudySetToolStripMenuItem.Enabled = true;
             createToolStripMenuItem.Enabled = _perceptron_ == null;
         }
 
@@ -305,6 +307,7 @@ namespace Perceptron
             viewStudySetToolStripMenuItem.Enabled = false;
             clearToolStripMenuItem.Enabled = false;
             createToolStripMenuItem.Enabled = false;
+            saveStudySetToolStripMenuItem.Enabled = false;
         }
 
         private void createPerceptronToolStripMenuItem_Click(object sender, EventArgs e) {
@@ -379,6 +382,69 @@ namespace Perceptron
                     if (outputs[index_of_max] < outputs[j]) index_of_max = j;
                 }
                 MessageBox.Show("It is symbol   " + perceptron_studied_leters[index_of_max]);
+            }
+        }
+
+        private void loadStudySetToolStripMenuItem_Click(object sender, EventArgs e) {
+            if (folderBrowserDialog1.ShowDialog() != DialogResult.OK) return;
+
+            Dictionary<char, List<Bitmap>> new_study_set = new Dictionary<char, List<Bitmap>>();
+
+            try {
+
+                foreach (string subdir_path in System.IO.Directory.GetDirectories(folderBrowserDialog1.SelectedPath))
+                {
+                    System.IO.DirectoryInfo info = new System.IO.DirectoryInfo(subdir_path);
+                    char symbol = info.Name[0];
+                    foreach (string file_path in System.IO.Directory.GetFiles(subdir_path))
+                    {
+                        Bitmap bmp = (Bitmap)System.Drawing.Image.FromFile(file_path);
+                        if (!new_study_set.ContainsKey(symbol)) new_study_set.Add(symbol, new List<Bitmap>());
+                        new_study_set[symbol].Add(bmp);
+                    }
+                }
+
+                if (new_study_set.Count == 0) throw new Exception();
+            } catch (Exception ex) {
+                MessageBox.Show("Can't load Study Set");
+                return;
+            }
+
+            study_set.Clear();
+            foreach (var pair in new_study_set) {
+                study_set.Add(pair.Key, pair.Value);
+            }
+            viewStudySetToolStripMenuItem.Enabled = true;
+            clearToolStripMenuItem.Enabled = true;
+            saveStudySetToolStripMenuItem.Enabled = true;
+            createToolStripMenuItem.Enabled = _perceptron_ == null;
+        }
+
+        private void saveStudySetToolStripMenuItem_Click(object sender, EventArgs e) {
+            if (folderBrowserDialog1.ShowDialog() != DialogResult.OK) return;
+
+            bool folder_created = false;
+
+            for (int i = 1; i < Int32.MaxValue; i++) {
+                if(!System.IO.Directory.Exists(folderBrowserDialog1.SelectedPath + "\\StudySet_" + i)) {
+                    folderBrowserDialog1.SelectedPath = folderBrowserDialog1.SelectedPath + "\\StudySet_" + i;
+                    System.IO.Directory.CreateDirectory(folderBrowserDialog1.SelectedPath);
+                    folder_created = true;
+                    break;
+                }
+            }
+
+            if (!folder_created) {
+                MessageBox.Show("Can't save Study Set");
+            }
+
+            foreach (var pair in study_set) {
+                string folder_path = folderBrowserDialog1.SelectedPath + "\\" + pair.Key;
+                if (!System.IO.Directory.Exists(folder_path)) System.IO.Directory.CreateDirectory(folder_path);
+                int i = 0;
+                foreach (Bitmap bmp in pair.Value) {
+                    bmp.Save(folder_path + "\\" + (++i).ToString() + ".jpg");
+                }
             }
         }
 
