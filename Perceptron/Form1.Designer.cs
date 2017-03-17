@@ -45,6 +45,8 @@
             this.studySetToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.viewStudySetToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.clearToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.loadStudySetToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.saveStudySetToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.perceptronToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.createToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.cleanToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -54,9 +56,8 @@
             this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
             this.saveFileDialog2 = new System.Windows.Forms.SaveFileDialog();
             this.fontDialog1 = new System.Windows.Forms.FontDialog();
-            this.loadStudySetToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.saveStudySetToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
+            this.testToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
@@ -222,7 +223,7 @@
             // 
             this.viewStudySetToolStripMenuItem.Enabled = false;
             this.viewStudySetToolStripMenuItem.Name = "viewStudySetToolStripMenuItem";
-            this.viewStudySetToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.viewStudySetToolStripMenuItem.Size = new System.Drawing.Size(104, 22);
             this.viewStudySetToolStripMenuItem.Text = "View";
             this.viewStudySetToolStripMenuItem.Click += new System.EventHandler(this.viewStudySetToolStripMenuItem_Click);
             // 
@@ -230,15 +231,31 @@
             // 
             this.clearToolStripMenuItem.Enabled = false;
             this.clearToolStripMenuItem.Name = "clearToolStripMenuItem";
-            this.clearToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.clearToolStripMenuItem.Size = new System.Drawing.Size(104, 22);
             this.clearToolStripMenuItem.Text = "Clean";
             this.clearToolStripMenuItem.Click += new System.EventHandler(this.clearToolStripMenuItem_Click);
+            // 
+            // loadStudySetToolStripMenuItem
+            // 
+            this.loadStudySetToolStripMenuItem.Name = "loadStudySetToolStripMenuItem";
+            this.loadStudySetToolStripMenuItem.Size = new System.Drawing.Size(104, 22);
+            this.loadStudySetToolStripMenuItem.Text = "Load";
+            this.loadStudySetToolStripMenuItem.Click += new System.EventHandler(this.loadStudySetToolStripMenuItem_Click);
+            // 
+            // saveStudySetToolStripMenuItem
+            // 
+            this.saveStudySetToolStripMenuItem.Enabled = false;
+            this.saveStudySetToolStripMenuItem.Name = "saveStudySetToolStripMenuItem";
+            this.saveStudySetToolStripMenuItem.Size = new System.Drawing.Size(104, 22);
+            this.saveStudySetToolStripMenuItem.Text = "Save";
+            this.saveStudySetToolStripMenuItem.Click += new System.EventHandler(this.saveStudySetToolStripMenuItem_Click);
             // 
             // perceptronToolStripMenuItem
             // 
             this.perceptronToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.createToolStripMenuItem,
-            this.cleanToolStripMenuItem});
+            this.cleanToolStripMenuItem,
+            this.testToolStripMenuItem});
             this.perceptronToolStripMenuItem.Name = "perceptronToolStripMenuItem";
             this.perceptronToolStripMenuItem.Size = new System.Drawing.Size(77, 20);
             this.perceptronToolStripMenuItem.Text = "Perceptron";
@@ -247,7 +264,7 @@
             // 
             this.createToolStripMenuItem.Enabled = false;
             this.createToolStripMenuItem.Name = "createToolStripMenuItem";
-            this.createToolStripMenuItem.Size = new System.Drawing.Size(108, 22);
+            this.createToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.createToolStripMenuItem.Text = "Create";
             this.createToolStripMenuItem.Click += new System.EventHandler(this.createPerceptronToolStripMenuItem_Click);
             // 
@@ -255,7 +272,7 @@
             // 
             this.cleanToolStripMenuItem.Enabled = false;
             this.cleanToolStripMenuItem.Name = "cleanToolStripMenuItem";
-            this.cleanToolStripMenuItem.Size = new System.Drawing.Size(108, 22);
+            this.cleanToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.cleanToolStripMenuItem.Text = "Clean";
             this.cleanToolStripMenuItem.Click += new System.EventHandler(this.cleanToolStripMenuItem_Click);
             // 
@@ -274,20 +291,13 @@
             // 
             this.openFileDialog2.FileName = "openFileDialog2";
             // 
-            // loadStudySetToolStripMenuItem
+            // testToolStripMenuItem
             // 
-            this.loadStudySetToolStripMenuItem.Name = "loadStudySetToolStripMenuItem";
-            this.loadStudySetToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.loadStudySetToolStripMenuItem.Text = "Load";
-            this.loadStudySetToolStripMenuItem.Click += new System.EventHandler(this.loadStudySetToolStripMenuItem_Click);
-            // 
-            // saveStudySetToolStripMenuItem
-            // 
-            this.saveStudySetToolStripMenuItem.Enabled = false;
-            this.saveStudySetToolStripMenuItem.Name = "saveStudySetToolStripMenuItem";
-            this.saveStudySetToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.saveStudySetToolStripMenuItem.Text = "Save";
-            this.saveStudySetToolStripMenuItem.Click += new System.EventHandler(this.saveStudySetToolStripMenuItem_Click);
+            this.testToolStripMenuItem.Enabled = false;
+            this.testToolStripMenuItem.Name = "testToolStripMenuItem";
+            this.testToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.testToolStripMenuItem.Text = "Test";
+            this.testToolStripMenuItem.Click += new System.EventHandler(this.testToolStripMenuItem_Click);
             // 
             // Form1
             // 
@@ -342,6 +352,7 @@
         private System.Windows.Forms.ToolStripMenuItem loadStudySetToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem saveStudySetToolStripMenuItem;
         private System.Windows.Forms.FolderBrowserDialog folderBrowserDialog1;
+        private System.Windows.Forms.ToolStripMenuItem testToolStripMenuItem;
     }
 }
 

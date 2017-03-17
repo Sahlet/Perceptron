@@ -8,6 +8,8 @@ using System.Threading.Tasks;
 
 namespace Perceptron {
     class Perceptron {
+        Neuron bias;
+
         Neuron[][] layers;
         private class Inputer {
             public double value = 0;
@@ -18,7 +20,11 @@ namespace Perceptron {
         private Inputer[] inputers;
         public class NeuronData {
             public double[] weights;
-            public NeuronData(double[] weights) { this.weights = weights; }
+            public double bias_weight;
+            public NeuronData(double[] weights, double bias_weight) {
+                this.weights = weights;
+                this.bias_weight = bias_weight;
+            }
         }
         public Perceptron(uint[] Neuron_layers_sizes) {
             if (Neuron_layers_sizes == null || Neuron_layers_sizes.Length < 2) throw new Exception("bad args");
@@ -32,7 +38,7 @@ namespace Perceptron {
                 if (i > 0) {
                     double[] weights = new double[Neuron_layers_sizes[i - 1]];
                     for (int j = 0; j < Neuron_layers_sizes[i]; j++) {
-                        neurons_data[i][j] = new NeuronData(weights);
+                        neurons_data[i][j] = new NeuronData(weights, 1);
                     }
                 }
             }
@@ -57,6 +63,10 @@ namespace Perceptron {
             construct(neurons);
         }
         private void construct(NeuronData[][] neurons) {
+            Inputer bias_inputer = new Inputer();
+            bias_inputer.value = 1;
+            bias = new Neuron(new Neuron.activation_functions.activation_function_type(bias_inputer.call));
+
             layers = new Neuron[neurons.Length][];
             //the first layer
             inputers = new Inputer[neurons[0].Length];
@@ -80,6 +90,7 @@ namespace Perceptron {
                     for (int k = 0; k < neurons[i - 1].Length; k++) {
                         neuron.add_parent(layers[i - 1][k], neurons[i][j].weights[k]);
                     }
+                    neuron.add_parent(bias, 1);
                 }
             }
         }
@@ -89,14 +100,16 @@ namespace Perceptron {
         public void reinit() {
             epoch = 0;
 
-            for (int i = layers.Length - 1; i >= 0 ; i--) {
+            for (int i = layers.Length - 1; i >= 1 ; i--) {
                 for (int j = 0; j < layers[i].Length; j++) {
                     layers[i][j].inited = false;
                 }
             }
-        	var rand = new Random((int)System.DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1)).TotalSeconds);
-        	for (int i = 0; i < layers[layers.Length - 1].Length; i++) {
-                layers[layers.Length - 1][i].start_init(rand);
+            Random rand;
+            rand = new Random((int)System.DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1)).TotalSeconds);
+            //rand = new Random(1);
+            for (int j = 0; j < layers[layers.Length - 1].Length; j++) {
+                layers[layers.Length - 1][j].start_init(rand);
             }
         }
 
@@ -159,7 +172,18 @@ namespace Perceptron {
             for (int i = 0; i < neurons.Length; i++) {
                 neurons[i] = new NeuronData[layers[i].Length];
                 for (int j = 0; j < neurons[i].Length; j++) {
-                    neurons[i][j] = new NeuronData(layers[i][j].get_weights());
+                    var parents = layers[i][j].Parents;
+
+                    double[] weights = new double[parents.Count - 1];
+                    double bias_weight = 0;
+                    int _i_ = 0;
+                    foreach (var link in parents)
+                    {
+                        if (link.neuron == bias) bias_weight = link.weight;
+                        else weights[_i_++] = link.weight;
+                    }
+
+                    neurons[i][j] = new NeuronData(weights, bias_weight);
                 }
             }
 

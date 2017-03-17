@@ -21,7 +21,7 @@ namespace Perceptron
                 _perceptron_ = value;
                 SavePerceptronToolStripMenuItem.Enabled = _perceptron_ != null;
                 createToolStripMenuItem.Enabled = study_set.Count > 0 && _perceptron_ == null;
-                cleanToolStripMenuItem.Enabled = _perceptron_ != null;
+                testToolStripMenuItem.Enabled = cleanToolStripMenuItem.Enabled = _perceptron_ != null;
             }
         }
         private Dictionary<char, List<Bitmap>> study_set = new Dictionary<char, List<Bitmap>>();
@@ -446,6 +446,87 @@ namespace Perceptron
                     bmp.Save(folder_path + "\\" + (++i).ToString() + ".jpg");
                 }
             }
+        }
+
+        private void testToolStripMenuItem_Click(object sender, EventArgs e) {
+            if (folderBrowserDialog1.ShowDialog() != DialogResult.OK) return;
+
+            Dictionary< char, List< Bitmap > > test_set = new Dictionary< char, List< Bitmap > >();
+
+            try {
+
+                foreach (string subdir_path in System.IO.Directory.GetDirectories(folderBrowserDialog1.SelectedPath))
+                {
+                    System.IO.DirectoryInfo info = new System.IO.DirectoryInfo(subdir_path);
+                    char symbol = info.Name[0];
+                    foreach (string file_path in System.IO.Directory.GetFiles(subdir_path))
+                    {
+                        Bitmap bmp = (Bitmap)System.Drawing.Image.FromFile(file_path);
+                        if (!test_set.ContainsKey(symbol)) test_set.Add(symbol, new List<Bitmap>());
+                        test_set[symbol].Add(bmp);
+                    }
+                }
+
+                if (test_set.Count == 0) throw new Exception();
+            } catch (Exception ex) {
+                MessageBox.Show("Can't load test Set");
+                return;
+            }
+
+            if (perceptron_studied_leters.Length < test_set.Count) {
+                MessageBox.Show("perceptron_studied_leters set does not contain test_set leters set");
+                return;
+            }
+
+            SortedSet< char > perceptron_leters_set = new SortedSet<char>();
+
+            foreach (char ch in perceptron_studied_leters) {
+                perceptron_leters_set.Add(ch);
+            }
+
+            foreach (char ch in test_set.Keys) {
+                if (!perceptron_leters_set.Contains(ch)) {
+                    MessageBox.Show("perceptron_studied_leters dose not conteint '" + ch + "' leter from the test_set");
+                    return;
+                }
+            }
+
+            int tests_number = 0;
+            Dictionary<char, List<Bitmap>> unsolved_test_set = new Dictionary<char, List<Bitmap>>();
+            Dictionary<char, List<Bitmap>> error_test_set = new Dictionary<char, List<Bitmap>>();
+
+            foreach (var pair in test_set) {
+                tests_number += pair.Value.Count;
+                foreach (Bitmap bmp in pair.Value) {
+                    bool[,] sensor_field = get_sensor_field(bmp, sensor_field_size);
+                    if (sensor_field != null) {
+                        double[] inputs = new double[sensor_field_size.Width * sensor_field_size.Height];
+                        int j = 0;
+                        foreach (bool obj in sensor_field)
+                        {
+                            inputs[j++] = obj ? 1 : 0;
+                        }
+                        perceptron.set_input(inputs);
+                        var outputs = perceptron.get_output();
+                        int index_of_max = 0;
+                        for (j = 0; j < outputs.Length; j++)
+                        {
+                            if (outputs[index_of_max] < outputs[j]) index_of_max = j;
+                        }
+
+                        if (pair.Key != perceptron_studied_leters[index_of_max]) {
+                            if (!unsolved_test_set.ContainsKey(pair.Key)) unsolved_test_set.Add(pair.Key, new List<Bitmap>());
+                            unsolved_test_set[pair.Key].Add(bmp);
+                        }
+                    } else {
+                        if (!error_test_set.ContainsKey(pair.Key)) error_test_set.Add(pair.Key, new List<Bitmap>());
+                        error_test_set[pair.Key].Add(bmp);
+                    }
+                }
+            }
+
+            TestResult testResult = new TestResult(tests_number, unsolved_test_set, error_test_set);
+            testResult.ShowDialog();
         }
 
         //private byte GetBytesPerPixel(PixelFormat pixelFormat) {
